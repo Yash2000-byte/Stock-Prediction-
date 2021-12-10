@@ -1,3 +1,24 @@
+import pandas as pd
+import numpy as np
+from keras.preprocessing.sequence import TimeseriesGenerator
+from sklearn.preprocessing import MinMaxScaler
+from keras.models import Sequential
+from keras.layers import LSTM, Dense, Dropout, Activation
+from tensorflow.keras import regularizers
+from plotly import graph_objs as go
+
+#CSV file
+
+filename= "/content/drive/MyDrive/CSV file/ASIANPAINT.csv"
+df= pd.read_csv(filename)
+print(df.info())
+
+#drop the unnecessary data
+df['Date']= pd.to_datetime(df['Date'])
+df.set_axis(df['Date'], inplace= False)
+df= df.dropna()
+df.drop(columns=['Adj Close'], inplace=False)
+
 cl_data = df['Close'].values
 cl_data = cl_data.reshape((len(cl_data), 1))
 scaler = MinMaxScaler(feature_range=(0, 1))
@@ -102,24 +123,3 @@ layout = go.Layout(
 )
 fig = go.Figure(data=[trace1,trace2,trace3,trace4], layout=layout)
 fig.show()
-
-import pandas as pd
-import numpy as np
-from keras.preprocessing.sequence import TimeseriesGenerator
-from sklearn.preprocessing import MinMaxScaler
-from keras.models import Sequential
-from keras.layers import LSTM, Dense, Dropout, Activation
-from tensorflow.keras import regularizers
-from plotly import graph_objs as go
-
-#CSV file
-
-filename= "/content/drive/MyDrive/CSV file/ASIANPAINT.csv"
-df= pd.read_csv(filename)
-print(df.info())
-
-#drop the unnecessary data
-df['Date']= pd.to_datetime(df['Date'])
-df.set_axis(df['Date'], inplace= False)
-df= df.dropna()
-df.drop(columns=['Adj Close'], inplace=False)
